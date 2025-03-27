@@ -14,17 +14,15 @@ const menuBtn = document.querySelector('.menu-btn');
 const mobileMenu = document.querySelector('.mobile-menu');
 if (menuBtn && mobileMenu) {
     const toggleMenu = () => {
+        console.log('Hamburger menu tapped!'); // Debug log
         mobileMenu.classList.toggle('active');
         const isActive = mobileMenu.classList.contains('active');
+        console.log('Mobile menu active:', isActive); // Debug log
         menuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
     };
 
-    // Add both click and touchstart event listeners
     menuBtn.addEventListener('click', toggleMenu);
-    menuBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
-        toggleMenu();
-    });
+    // Removed touchstart event listener to simplify
 }
 
 // Scroll to Top
@@ -86,7 +84,6 @@ if (testimonialsCarousel && testimonialItems.length > 0 && prevBtn && nextBtn) {
         showTestimonial(currentIndex);
     });
 
-    // Auto-slide every 5 seconds
     setInterval(() => {
         currentIndex = (currentIndex < testimonialItems.length - 1) ? currentIndex + 1 : 0;
         showTestimonial(currentIndex);
@@ -128,3 +125,9 @@ if (faqQuestions) {
         });
     });
 }
+const toggleMenu = () => {
+    console.log('Hamburger menu tapped!'); // Add this line
+    mobileMenu.classList.toggle('active');
+    const isActive = mobileMenu.classList.contains('active');
+    menuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+};

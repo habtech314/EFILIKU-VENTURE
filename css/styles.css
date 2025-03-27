@@ -1045,3 +1045,46 @@ footer {
     height: auto;
     margin-right: 10px; /* Space between logo and text */
 }
+.menu-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: block;
+    line-height: 1;
+}
+
+.mobile-menu {
+    background: var(--primary);
+    padding: var(--spacing-md);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.mobile-menu.active {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .nav ul {
+        display: flex !important;
+        gap: var(--spacing-md);
+    }
+    .menu-btn, .mobile-menu {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .nav ul {
+        display: none !important;
+    }
+    .menu-btn {
+        display: block !important;
+    }
+}
