@@ -1040,3 +1040,8 @@ footer {
         font-size: 0.9rem;
     }
 }
+.logo-img {
+    width: 50px; /* Adjust the size */
+    height: auto;
+    margin-right: 10px; /* Space between logo and text */
+}

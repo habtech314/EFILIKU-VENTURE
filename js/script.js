@@ -1,137 +1,130 @@
 // Preloader
 window.addEventListener('load', () => {
-    document.getElementById('preloader').style.display = 'none';
+    const preloader = document.querySelector('.preloader');
+    if (preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500);
+    }
 });
 
 // Mobile Menu Toggle
-document.getElementById('menu-btn').addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.toggle(' 🙂hidden');
-});
+const menuBtn = document.querySelector('.menu-btn');
+const mobileMenu = document.querySelector('.mobile-menu');
+if (menuBtn && mobileMenu) {
+    const toggleMenu = () => {
+        mobileMenu.classList.toggle('active');
+        const isActive = mobileMenu.classList.contains('active');
+        menuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    };
 
-// Smooth Scrolling
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        if (link.getAttribute('href').startsWith('#')) {
-            e.preventDefault();
-            const target = document.querySelector(link.getAttribute('href'));
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-});
-
-// Fade-in and Slide-in on Scroll
-const fadeElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.1 });
-
-fadeElements.forEach(el => observer.observe(el));
-
-// Scroll to Top
-const scrollTopBtn = document.getElementById('scroll-top');
-window.addEventListener('scroll', () => {
-    scrollTopBtn.classList.toggle('hidden', window.scrollY < 200);
-});
-scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// Testimonials Carousel
-const testimonials = document.querySelectorAll('.testimonial-item');
-let currentTestimonial = 0;
-
-document.getElementById('next-testimonial')?.addEventListener('click', () => {
-    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-    updateCarousel();
-});
-
-document.getElementById('prev-testimonial')?.addEventListener('click', () => {
-    currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
-    updateCarousel();
-});
-
-function updateCarousel() {
-    testimonials.forEach((item, index) => {
-        item.style.transform = `translateX(${(index - currentTestimonial) * 100}%)`;
+    // Add both click and touchstart event listeners
+    menuBtn.addEventListener('click', toggleMenu);
+    menuBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
+        toggleMenu();
     });
 }
 
-// FAQ Accordion
-document.querySelectorAll('.faq-question').forEach(button => {
-    button.addEventListener('click', () => {
-        const answer = button.nextElementSibling;
-        answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
-    });
-});
-
-// Contact Form Validation
-document.getElementById('contact-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-
-    if (!name || !email || !subject || !message) {
-        alert('Please fill out all fields.');
-        return;
-    }
-
-    alert('Form submitted successfully!');
-    e.target.reset();
-});
-
-// Portfolio Filter
-document.querySelectorAll('.filter-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        const filter = button.getAttribute('data-filter');
-        document.querySelectorAll('.portfolio-item').forEach(item => {
-            if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-});
-
-// Animated Stats Counter
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            document.querySelectorAll('.stat-number').forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-target'));
-                let count = 0;
-                const increment = target / 50;
-                const updateCounter = () => {
-                    count += increment;
-                    if (count < target) {
-                        stat.textContent = Math.ceil(count);
-                        setTimeout(updateCounter, 50);
-                    } else {
-                        stat.textContent = target;
-                    }
-                };
-                updateCounter();
-            });
-            statsObserver.unobserve(entry.target);
+// Scroll to Top
+const scrollTopBtn = document.querySelector('.scroll-top');
+if (scrollTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.remove('hidden');
+        } else {
+            scrollTopBtn.classList.add('hidden');
         }
     });
-}, { threshold: 0.5 });
 
-document.querySelectorAll('.stats').forEach(section => statsObserver.observe(section));
-document.addEventListener("DOMContentLoaded", function () {
-    const menuBtn = document.getElementById("menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    menuBtn.addEventListener("click", function () {
-        mobileMenu.classList.toggle("show");
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-});
+}
+
+// Portfolio Filter
+const filterButtons = document.querySelectorAll('.filter-btn');
+const portfolioItems = document.querySelectorAll('.portfolio-item');
+if (filterButtons && portfolioItems) {
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+            portfolioItems.forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+// Testimonials Carousel
+const testimonialsCarousel = document.querySelector('.testimonials-carousel');
+const testimonialItems = document.querySelectorAll('.testimonial-item');
+const prevBtn = document.querySelector('.carousel-controls .prev');
+const nextBtn = document.querySelector('.carousel-controls .next');
+if (testimonialsCarousel && testimonialItems.length > 0 && prevBtn && nextBtn) {
+    let currentIndex = 0;
+
+    const showTestimonial = (index) => {
+        testimonialsCarousel.style.transform = `translateX(-${index * 100}%)`;
+    };
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : testimonialItems.length - 1;
+        showTestimonial(currentIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex < testimonialItems.length - 1) ? currentIndex + 1 : 0;
+        showTestimonial(currentIndex);
+    });
+
+    // Auto-slide every 5 seconds
+    setInterval(() => {
+        currentIndex = (currentIndex < testimonialItems.length - 1) ? currentIndex + 1 : 0;
+        showTestimonial(currentIndex);
+    }, 5000);
+}
+
+// Scroll Animations
+const fadeInElements = document.querySelectorAll('.fade-in');
+const slideInLeftElements = document.querySelectorAll('.slide-in-left');
+const slideInRightElements = document.querySelectorAll('.slide-in-right');
+
+const observerOptions = {
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+fadeInElements.forEach(element => observer.observe(element));
+slideInLeftElements.forEach(element => observer.observe(element));
+slideInRightElements.forEach(element => observer.observe(element));
+
+// FAQ Toggle (for contact.html)
+const faqQuestions = document.querySelectorAll('.faq-question');
+if (faqQuestions) {
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const isOpen = answer.style.display === 'block';
+            answer.style.display = isOpen ? 'none' : 'block';
+            question.querySelector('i').classList.toggle('fa-chevron-down');
+            question.querySelector('i').classList.toggle('fa-chevron-up');
+        });
+    });
+}
