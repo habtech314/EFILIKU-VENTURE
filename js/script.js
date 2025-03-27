@@ -13,16 +13,20 @@ window.addEventListener('load', () => {
 const menuBtn = document.querySelector('.menu-btn');
 const mobileMenu = document.querySelector('.mobile-menu');
 if (menuBtn && mobileMenu) {
-    const toggleMenu = () => {
-        console.log('Hamburger menu tapped!'); // Debug log
+    const toggleMenu = (e) => {
+        e.preventDefault(); // Prevent default behavior (e.g., scrolling)
+        console.log('Hamburger menu tapped!');
         mobileMenu.classList.toggle('active');
         const isActive = mobileMenu.classList.contains('active');
-        console.log('Mobile menu active:', isActive); // Debug log
+        console.log('Mobile menu active:', isActive);
         menuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        // Visual cue: change header background color
+        document.querySelector('header.sticky').style.background = isActive ? '#ff0000' : 'var(--primary)';
     };
 
+    // Add both click and touchstart events
     menuBtn.addEventListener('click', toggleMenu);
-    // Removed touchstart event listener to simplify
+    menuBtn.addEventListener('touchstart', toggleMenu);
 }
 
 // Scroll to Top
@@ -125,9 +129,3 @@ if (faqQuestions) {
         });
     });
 }
-const toggleMenu = () => {
-    console.log('Hamburger menu tapped!'); // Add this line
-    mobileMenu.classList.toggle('active');
-    const isActive = mobileMenu.classList.contains('active');
-    menuBtn.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-};
